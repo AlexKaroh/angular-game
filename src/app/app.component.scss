@@ -63,6 +63,7 @@
 .header__navigation {
 	padding: 45px 0 0 245px;
 	width: 407px;
+	height: 100%;
 	display: flex;
 	justify-content: space-between;
 }
@@ -73,6 +74,7 @@
 	border: none;
 	border-radius: 15px;
 	background-blend-mode: overlay, normal;
+	cursor: pointer;
 }
 
 .orange {
@@ -101,4 +103,29 @@
 
 .blue_font {
 	color: rgba(182, 246, 255, 1);
+}
+
+.game__field {
+	margin: 25px 40px 40px 40px;
+	padding-left: 12px;
+	width: 780px;
+	height: 780px;
+	display: grid;
+	gap: 30px;
+	grid-template-columns: repeat(5, 130px);
+	align-content: center;
+	background: linear-gradient(180deg, #AAC2FF 0%, #C81BF1 100%);
+	box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+	-webkit-backdrop-filter: blur(50.5px);
+	backdrop-filter: blur(50.5px);
+	border-radius: 20px;
+}
+
+.field__cell {
+	width: 128px;
+	height: 128px;
+	background: linear-gradient(180deg, #FFFFFF -31.99%, rgba(255, 255, 255, 0) 113.98%);
+	filter: drop-shadow(-21px 15px 50px rgba(29, 38, 70, 0.25));
+	backdrop-filter: blur(7px);
+	border-radius: 16px;
 }
