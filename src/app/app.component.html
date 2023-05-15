@@ -15,7 +15,7 @@
     <div class="game__field">
       <div class="field__cell" 
       (click)="getPosition($event.target)" 
-      *ngFor="let cell of field.flat()" 
+      *ngFor="let cell of field.flat();" 
       #square></div>
     </div>
   </div>
