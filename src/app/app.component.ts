@@ -11,13 +11,7 @@ export class AppComponent implements OnInit  {
 
   title = '5x5';
 
-  field = [
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0]
-  ];
+  field = Array(25).fill(0);
 
   constructor() {}
 
@@ -27,7 +21,9 @@ export class AppComponent implements OnInit  {
     const rowSize = 5;
     let col = clickedIndex % rowSize;
     let row = Math.floor(clickedIndex / rowSize);
+    this.field[clickedIndex] = 1;
     console.log(`row: ${++row}, col: ${++col}`);
+    console.log(this.field);
   }
 
   ngOnInit(): void {}
