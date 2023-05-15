@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+.game {
+	height: 1080px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-image: url(./../images/bgrd.png);
+	background-size: cover;
+	overflow: hidden;
+}
+
+.game__container {
+	width: 860px;
+	height: 946px;
+	z-index: 2;
+	background: linear-gradient(111.49deg, rgba(255, 255, 255, 0.4) -8.95%, rgba(255, 255, 255, 0.01) 114%);
+	backdrop-filter: blur(50px);
+	border: 2px solid rgb(230, 230, 230);
+	border-radius: 25px;
+}
+
+.game__ellipse_blue {
+	width: 428px;
+	height: 428px;
+	position: absolute;
+	left: 310px;
+	top: 98px;
+	z-index: 1;
+	border-radius: 100%;
+	background: linear-gradient(90deg, #FC00FF 0%, #00DBDE 100%);
+	transform: rotate(-105deg);
+}
+
+.game__ellipse_orange {
+	width: 380px;
+	height: 380px;
+	position: absolute;
+	left: 1226px;
+	top: 802px;
+	z-index: 1;
+	border-radius: 100%;
+	background: linear-gradient(90deg, #E65C00 0%, #F9D423 100%);
+}
+
+.game__header {
+	display: flex;
+}
+
+.header__title {
+	padding-left: 40px;
+	padding-top: 35px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 48px;
+	text-transform: capitalize;
+	background: linear-gradient(180deg, #296399 54.68%, #fff 187.46%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.header__navigation {
+	padding: 45px 0 0 245px;
+	width: 407px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.header__button {
+	width: 192px;
+	height: 48px;
+	border: none;
+	border-radius: 15px;
+	background-blend-mode: overlay, normal;
+}
+
+.orange {
+	background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), #F96E03;
+	filter: drop-shadow(0px 2px 0px  #F85104);
+}
+
+.blue {
+	background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), #265DC7;
+	filter: drop-shadow(0px 2px 0px  #2584F4);
+}
+
+.button__text {
+	font-family: 'Poppins', sans-serif;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 16px;
+	line-height: 24px;
+
+	text-shadow: 2.07958px 0px 6.23875px rgba(0, 0, 0, 0.35), 0px 2.07958px 4.15917px rgba(0, 0, 0, 0.24), 0px 2.07958px 2.07958px rgba(0, 0, 0, 0.22), 0px 2.07958px 4.15917px rgba(0, 0, 0, 0.2);
+}
+
+.orange_font {
+	color: rgba(255, 238, 216, 1);
+}
+
+.blue_font {
+	color: rgba(182, 246, 255, 1);
+}
