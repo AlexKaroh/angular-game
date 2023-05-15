@@ -12,7 +12,11 @@
         </button>
       </div>
     </div>
-    <div class="game__field" #field>
+    <div class="game__field">
+      <div class="field__cell" 
+      (click)="getPosition($event.target)" 
+      *ngFor="let cell of field.flat()" 
+      #square></div>
     </div>
   </div>
   <div  class="game__ellipse_orange"></div>
