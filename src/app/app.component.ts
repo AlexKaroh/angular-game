@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 
 export class AppComponent implements OnInit  {
@@ -16,15 +16,16 @@ export class AppComponent implements OnInit  {
 
   getPosition(event: EventTarget| null) {
     this.clearUnusedCells();
-    const elementsArr = this.square?.toArray().map(el => el.nativeElement);
-    const clickedIndex = elementsArr!.indexOf(event);
+    const elementsArr = this.square!.toArray().map(el => el.nativeElement);
+    const clickedIndex = elementsArr.indexOf(event);
     this.getPossibleMoves(clickedIndex);
     this.field[clickedIndex] = 1;
   }
 
   clearUnusedCells(): void {
     for (let i = 0; i < this.field.length; i++){
-      if(this.field[i] === 2) this.field[i] = 0
+      if(this.field[i] === 2) this.field[i] = 0;
+      if(this.field[i] === 1) this.field[i] = 3;
     }
   }
 
@@ -52,6 +53,21 @@ export class AppComponent implements OnInit  {
         this.field[index] = 2;
       }
     });
+  }
+
+  getCellClass(cell: number): string {
+    switch (cell) {
+      case 0:
+        return 'empty';
+      case 1:
+        return 'active';
+      case 2:
+        return 'possible';
+      case 3:
+        return 'inactive'
+      default:
+        return '';
+    }
   }
 
   ngOnInit(): void {}

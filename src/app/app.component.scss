@@ -124,8 +124,55 @@
 .field__cell {
 	width: 128px;
 	height: 128px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background: linear-gradient(180deg, #FFFFFF -31.99%, rgba(255, 255, 255, 0) 113.98%);
 	filter: drop-shadow(-21px 15px 50px rgba(29, 38, 70, 0.25));
 	backdrop-filter: blur(7px);
 	border-radius: 16px;
+	cursor: pointer;
+}
+
+.cell__possible {
+	background: linear-gradient(180deg, rgba(237, 199, 255, 0.46) 0.89%, rgba(171, 119, 255, 0.74) 100.88%);
+}
+
+.cell__font {
+	font-family: 'Poppins';
+	font-style: normal;
+	font-size: 16px;
+	line-height: 24px;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+.possible::content {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url(./../images/possible_dot.png);
+	background-size: cover;
+}
+
+.active::content {
+	width: 76px;
+	height: 76px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url(./../images/active_dot.png);
+	background-size: cover;
+}
+
+.inactive::content {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url(./../images/inactive_dot.png);
+	background-size: cover;
 }

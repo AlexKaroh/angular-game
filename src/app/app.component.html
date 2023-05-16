@@ -13,7 +13,9 @@
       </div>
     </div>
     <div class="game__field">
-      <div class="field__cell" (click)="getPosition($event.target)" *ngFor="let cell of field" #square>{{cell}}</div>
+      <div class="field__cell" [ngClass]="{cell__possible: cell === 2}" (click)="getPosition($event.target)" *ngFor="let cell of field" #square>
+        <span class="cell__font" [ngClass]="getCellClass(cell)"></span>
+      </div>
     </div>
   </div>
   <div  class="game__ellipse_orange"></div>
