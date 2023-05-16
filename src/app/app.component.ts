@@ -1,26 +1,28 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit  {
+export class AppComponent {
   @ViewChildren('square') square: QueryList<ElementRef> | undefined;
   title = '5x5';
   field = Array(25).fill(0);
   moveCounts = Array(25).fill(0);
   moveCount = 0;
   isFirstMove = true;
+  previousMove: number | undefined;
 
   constructor() {}
 
   restartGame() {
-    this.field = Array(25).fill(0);
+    this.field.fill(0);
     this.moveCount = 0;
-    this.moveCounts = Array(25).fill(0);
+    this.moveCounts.fill(0);
     this.isFirstMove = true;
+    this.previousMove = undefined;
   }
 
   getPosition(event: EventTarget| null) {
@@ -39,11 +41,34 @@ export class AppComponent implements OnInit  {
     }
   }
 
+  checkIsWin() {
+    if(this.field.filter(el => el === 3).length === 24 && this.field.filter(el => el === 1).length === 1){
+      alert('congrats!')
+    }
+  }
+
+  checkIsLose() {
+    if(this.field.filter(el => el === 2).length === 0) {
+      alert('u loose!')
+    }
+  }
+
   confirmMove(clickedIndex: number) {
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
+    this.getPreviousMove(clickedIndex);
     this.field[clickedIndex] = 1;
+    this.checkIsWin();
+    this.checkIsLose();
+  }
+
+  getPreviousMove(clickedIndex: number) {
+    this.previousMove = clickedIndex;
+  }
+
+  moveBack() {
+    console.log(this.previousMove);
   }
 
   incrementCounter(clickedIndex: number) {
@@ -98,6 +123,4 @@ export class AppComponent implements OnInit  {
         return 'empty';
     }
   }
-
-  ngOnInit(): void {}
 }
