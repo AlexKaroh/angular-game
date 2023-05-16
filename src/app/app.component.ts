@@ -12,7 +12,6 @@ export class AppComponent implements OnInit  {
   field = Array(25).fill(0);
   isFirstMove = true;
 
-
   constructor() {}
 
   restartGame() {
@@ -23,15 +22,23 @@ export class AppComponent implements OnInit  {
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
     const clickedIndex = elementsArr.indexOf(event);
+    this.validateMove(clickedIndex);
+  }
 
-    if(this.isFirstMove === true && this.field[clickedIndex] === 0) {
+  validateMove(clickedIndex: number): void {
+    if(this.isFirstMove === true) {
       this.confirmMove(clickedIndex);
       this.isFirstMove = false;
     }
-
     if(this.isFirstMove === false && this.field[clickedIndex] === 2) {
       this.confirmMove(clickedIndex);
     }
+  }
+
+  confirmMove(clickedIndex: number) {
+    this.clearUnusedCells();
+    this.getPossibleMoves(clickedIndex);
+    this.field[clickedIndex] = 1;
   }
 
   clearUnusedCells() {
@@ -67,12 +74,6 @@ export class AppComponent implements OnInit  {
     });
   }
 
-  confirmMove(clickedIndex: number) {
-    this.clearUnusedCells();
-    this.getPossibleMoves(clickedIndex);
-    this.field[clickedIndex] = 1;
-  }
-
   getCellClass(cell: number): string {
     switch (cell) {
       case 1:
@@ -87,5 +88,4 @@ export class AppComponent implements OnInit  {
   }
 
   ngOnInit(): void {}
-
 }
