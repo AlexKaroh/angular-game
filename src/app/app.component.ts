@@ -14,6 +14,7 @@ export class AppComponent {
   moveCount = 0;
   isFirstMove = true;
   previousMove: number | undefined;
+  memorizedMove: number | undefined;
 
   constructor() {}
 
@@ -54,21 +55,25 @@ export class AppComponent {
   }
 
   confirmMove(clickedIndex: number) {
+    this.getPrevIndex(this.previousMove);
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
-    this.getPreviousMove(clickedIndex);
     this.field[clickedIndex] = 1;
     this.checkIsWin();
     this.checkIsLose();
-  }
-
-  getPreviousMove(clickedIndex: number) {
     this.previousMove = clickedIndex;
   }
 
   moveBack() {
-    console.log(this.previousMove);
+    this.clearUnusedCells();
+    this.getPossibleMoves(this.memorizedMove as number);
+    this.field[this.memorizedMove as number] = 1;
+  }
+
+  getPrevIndex(previousIndex: number | undefined) {
+    this.memorizedMove = previousIndex;
+    console.log(this.memorizedMove);
   }
 
   incrementCounter(clickedIndex: number) {
