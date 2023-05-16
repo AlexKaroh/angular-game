@@ -11,22 +11,24 @@ export class AppComponent implements OnInit  {
   title = '5x5';
   field = Array(25).fill(0);
 
+
   constructor() {}
 
   getPosition(event: EventTarget| null) {
+    this.clearUnusedCells();
     const elementsArr = this.square?.toArray().map(el => el.nativeElement);
     const clickedIndex = elementsArr!.indexOf(event);
+    this.getPossibleMoves(clickedIndex);
     this.field[clickedIndex] = 1;
-    const possibleMoves = this.getPossibleMoves(clickedIndex);
-
-    possibleMoves.forEach(index => {
-      if (this.field[index] === 0) {
-        this.field[index] = 2;
-      }
-    });
   }
 
-  getPossibleMoves(index: number): number[] {
+  clearUnusedCells(): void {
+    for (let i = 0; i < this.field.length; i++){
+      if(this.field[i] === 2) this.field[i] = 0
+    }
+  }
+
+  getPossibleMoves(index: number): void {
     const rowSize = 5;
     const row = Math.floor(index / rowSize);
     const col = index % rowSize;
@@ -44,7 +46,12 @@ export class AppComponent implements OnInit  {
         }
       }
     }
-    return possibleMoves;
+
+    possibleMoves.forEach(index => {
+      if (this.field[index] === 0) {
+        this.field[index] = 2;
+      }
+    });
   }
 
   ngOnInit(): void {}
