@@ -8,9 +8,7 @@ import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular
 
 export class AppComponent implements OnInit  {
   @ViewChildren('square') square: QueryList<ElementRef> | undefined;
-
   title = '5x5';
-
   field = Array(25).fill(0);
 
   constructor() {}
@@ -18,12 +16,35 @@ export class AppComponent implements OnInit  {
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square?.toArray().map(el => el.nativeElement);
     const clickedIndex = elementsArr!.indexOf(event);
-    const rowSize = 5;
-    let col = clickedIndex % rowSize;
-    let row = Math.floor(clickedIndex / rowSize);
     this.field[clickedIndex] = 1;
-    console.log(`row: ${++row}, col: ${++col}`);
-    console.log(this.field);
+    const possibleMoves = this.getPossibleMoves(clickedIndex);
+
+    possibleMoves.forEach(index => {
+      if (this.field[index] === 0) {
+        this.field[index] = 2;
+      }
+    });
+  }
+
+  getPossibleMoves(index: number): number[] {
+    const rowSize = 5;
+    const row = Math.floor(index / rowSize);
+    const col = index % rowSize;
+    const possibleMoves = [];
+    const horseRange = [-2, -1, 1, 2];
+
+    for (let x of horseRange) {
+      for (let y of horseRange) {
+        if (Math.abs(x) !== Math.abs(y)) {
+          const possibleRow = row + y;
+          const possibleColunm = col + x;
+          if (possibleRow >= 0 && possibleRow < rowSize && possibleColunm >= 0 && possibleColunm < rowSize) {
+            possibleMoves.push(possibleRow * rowSize + possibleColunm);
+          }
+        }
+      }
+    }
+    return possibleMoves;
   }
 
   ngOnInit(): void {}
