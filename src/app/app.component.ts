@@ -10,12 +10,16 @@ export class AppComponent implements OnInit  {
   @ViewChildren('square') square: QueryList<ElementRef> | undefined;
   title = '5x5';
   field = Array(25).fill(0);
+  moveCounts = Array(25).fill(0);
+  moveCount = 0;
   isFirstMove = true;
 
   constructor() {}
 
   restartGame() {
     this.field = Array(25).fill(0);
+    this.moveCount = 0;
+    this.moveCounts = Array(25).fill(0);
     this.isFirstMove = true;
   }
 
@@ -38,7 +42,15 @@ export class AppComponent implements OnInit  {
   confirmMove(clickedIndex: number) {
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
+    this.incrementCounter(clickedIndex);
     this.field[clickedIndex] = 1;
+  }
+
+  incrementCounter(clickedIndex: number) {
+    if (this.moveCounts[clickedIndex] === 0) {
+      this.moveCounts[clickedIndex] = this.moveCount + 1;
+    }
+    this.moveCount++;
   }
 
   clearUnusedCells() {
@@ -81,7 +93,7 @@ export class AppComponent implements OnInit  {
       case 2:
         return 'possible';
       case 3:
-        return 'inactive'
+        return 'visited'
       default:
         return 'empty';
     }

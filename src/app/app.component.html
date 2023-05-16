@@ -13,8 +13,10 @@
       </div>
     </div>
     <div class="game__field">
-      <div class="field__cell" [ngClass]="{cell__possible: cell === 2}" (click)="getPosition($event.target)" *ngFor="let cell of field" #square>
-        <span class="cell__font" [ngClass]="getCellClass(cell)" (click)="getPosition(square)">{{cell}}</span>
+      <div class="field__cell" (click)="getPosition($event.target)" *ngFor="let cell of field; let i = index" #square>
+        <div class="cell__dot" [ngClass]="getCellClass(cell)" (click)="getPosition(square)">
+          <span class="cell__font" *ngIf="cell > 0 && cell !== 2">{{ moveCounts[i] }}</span>
+        </div>
       </div>
     </div>
   </div>
