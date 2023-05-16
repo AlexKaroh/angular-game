@@ -7,14 +7,14 @@
         <button class="header__button blue">
           <span class="button__text blue_font">STEP BACK</span>
         </button>
-        <button class="header__button orange">
+        <button class="header__button orange" (click)="restartGame()">
           <span class="button__text orange_font">RESTART</span>
         </button>
       </div>
     </div>
     <div class="game__field">
       <div class="field__cell" [ngClass]="{cell__possible: cell === 2}" (click)="getPosition($event.target)" *ngFor="let cell of field" #square>
-        <span class="cell__font" [ngClass]="getCellClass(cell)"></span>
+        <span class="cell__font" [ngClass]="getCellClass(cell)">{{cell}}</span>
       </div>
     </div>
   </div>
