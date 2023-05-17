@@ -8,12 +8,32 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 
 export class AppComponent {
   @ViewChildren('square') square: QueryList<ElementRef> | undefined;
-  title = '5x5';
+  title = '5x5'
+  gameSize = true;
   field = Array(25).fill(0);
   moveCounts = Array(25).fill(0);
   moveCount = 0;
   isFirstMove = true;
   moveHistory: number[] = [];
+
+  getTitle(flag: boolean): string {
+    if(flag === true){
+      return '5x5'
+    } return '10x10';
+  }
+
+  getSize() {
+    if(this.gameSize === true) {
+      this.field = Array(81);
+      this.moveCounts = Array(81);
+      this.restartGame();
+    } else {
+      this.field = Array(25).fill(0);
+      this.moveCounts = Array(25);
+      this.restartGame();
+    }
+    this.gameSize = !this.gameSize
+  }
 
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
@@ -32,7 +52,7 @@ export class AppComponent {
   }
 
   checkIsWin() {
-    if(this.field.filter(el => el === 3).length === 24 && this.field.filter(el => el === 1).length === 1){
+    if(this.field.filter(el => el === 3).length === this.field.length - 1 && this.field.filter(el => el === 1).length === 1){
       alert('congrats!')
     }
   }
@@ -47,6 +67,8 @@ export class AppComponent {
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
+    console.log(clickedIndex);
+  
     this.field[clickedIndex] = 1;
     this.checkIsWin();
     this.checkIsLose();
@@ -95,7 +117,7 @@ export class AppComponent {
   }
 
   getPossibleMoves(index: number) {
-    const rowSize = 5;
+    const rowSize = Math.sqrt(this.field.length);
     const row = Math.floor(index / rowSize);
     const col = index % rowSize;
     const possibleMoves = [];
@@ -128,7 +150,7 @@ export class AppComponent {
     this.moveHistory = [];
   }
 
-  getCellClass(cell: number): string {
+  getDotClass(cell: number): string {
     switch (cell) {
       case 1:
         return 'active';
@@ -139,5 +161,11 @@ export class AppComponent {
       default:
         return 'empty';
     }
+  }
+
+  getCellSize(cell: number): string {
+    if (cell === 2) {
+      return (this.gameSize === false ? 'small posible' : 'big posible');
+    } return (this.gameSize === false ? 'small' : 'big');
   }
 }

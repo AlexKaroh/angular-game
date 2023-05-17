@@ -14,6 +14,9 @@
 .game__container {
 	width: 860px;
 	height: 946px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
 	z-index: 2;
 	background: linear-gradient(111.49deg, rgba(255, 255, 255, 0.4) -8.95%, rgba(255, 255, 255, 0.01) 114%);
 	backdrop-filter: blur(50px);
@@ -45,12 +48,14 @@
 }
 
 .game__header {
+	padding-top: 35px;
 	display: flex;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
 }
 
 .header__title {
-	padding-left: 40px;
-	padding-top: 35px;
 	font-family: 'Poppins', sans-serif;
 	font-size: 48px;
 	text-transform: capitalize;
@@ -61,11 +66,11 @@
 }
 
 .header__navigation {
-	padding: 45px 0 0 245px;
-	width: 407px;
-	height: 100%;
-	display: flex;
-	justify-content: space-between;
+    width: 607px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .header__button {
@@ -110,9 +115,6 @@
 	padding-left: 12px;
 	width: 780px;
 	height: 780px;
-	display: grid;
-	gap: 30px;
-	grid-template-columns: repeat(5, 130px);
 	align-content: center;
 	background: linear-gradient(180deg, #AAC2FF 0%, #C81BF1 100%);
 	box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
@@ -121,9 +123,19 @@
 	border-radius: 20px;
 }
 
+.five {
+	display: grid;
+	gap: 30px;
+	grid-template-columns: repeat(5, 130px);
+}
+
+.nine {
+	display: grid;
+	gap: 15px 48px;
+	grid-template-columns: repeat(9, 39px);
+}
+
 .field__cell {
-	width: 128px;
-	height: 128px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -134,7 +146,17 @@
 	cursor: pointer;
 }
 
-.cell__possible {
+.small {
+	width: 70px;
+	height: 70px;
+}
+
+.big {
+	width: 128px;
+	height: 128px;
+}
+
+.posible {
 	background: linear-gradient(180deg, rgba(237, 199, 255, 0.46) 0.89%, rgba(171, 119, 255, 0.74) 100.88%);
 }
 
@@ -153,13 +175,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-image: url(./../images/possible_dot.png);
+	background-image: url(./../images/active_dot.png);
 	background-size: cover;
 }
 
 .active::content {
-	width: 76px;
-	height: 76px;
+	width: 56px;
+	height: 56px;
 	display: flex;
 	align-items: center;
 	justify-content: center;

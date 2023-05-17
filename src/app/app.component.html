@@ -2,8 +2,11 @@
   <div  class="game__ellipse_blue"></div>
   <div class="game__container">
     <div class="game__header">
-      <h1 class="header__title">{{title}}</h1>
+      <h1 class="header__title">{{this.gameSize === true ? '5x5' : '10x10'}}</h1>
       <div class="header__navigation">
+        <button class="header__button orange" (click)="getSize()">
+          <span class="button__text orange_font">Swap to {{!this.gameSize === true ? '5x5' : '10x10'}}</span>
+        </button>
         <button class="header__button blue" (click)="moveBack()">
           <span class="button__text blue_font">STEP BACK</span>
         </button>
@@ -12,9 +15,9 @@
         </button>
       </div>
     </div>
-    <div class="game__field">
-      <div class="field__cell" (click)="getPosition($event.target)" *ngFor="let cell of field; let i = index" #square>
-        <div class="cell__dot" [ngClass]="getCellClass(cell)" (click)="getPosition(square)">
+    <div class="game__field" [ngClass]="gameSize === true ? 'five' : 'nine'">
+      <div class="field__cell" [ngClass]="getCellSize(cell)" (click)="getPosition($event.target)" *ngFor="let cell of field; let i = index" #square>
+        <div class="cell__dot" [ngClass]="getDotClass(cell)" (click)="getPosition(square)">
           <span class="cell__font" *ngIf="cell > 0 && cell !== 2">{{ moveCounts[i] }}</span>
         </div>
       </div>
