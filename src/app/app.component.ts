@@ -15,6 +15,8 @@ export class AppComponent {
   moveCount = 0;
   isFirstMove = true;
   moveHistory: number[] = [];
+  isWin = false;
+  isLose = false;
 
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
@@ -34,13 +36,13 @@ export class AppComponent {
 
   checkIsWin() {
     if(this.field.filter(el => el === 3).length === this.field.length - 1 && this.field.filter(el => el === 1).length === 1){
-      alert('congrats!')
+      this.isWin = true;
     }
   }
 
   checkIsLose() {
-    if(this.field.filter(el => el === 2).length === 0) {
-      alert('u loose!')
+    if(this.field.filter(el => el === 2).length === 0 && this.isWin === false) {
+      this.isLose = true;
     }
   }
 
@@ -127,6 +129,8 @@ export class AppComponent {
     this.moveCounts.fill(0);
     this.isFirstMove = true;
     this.moveHistory = [];
+    this.isWin = false;
+    this.isLose = false;
   }
 
   getTitle(flag: boolean): string {
@@ -146,6 +150,15 @@ export class AppComponent {
       this.restartGame();
     }
     this.gameSize = !this.gameSize
+  }
+
+  closePopUp() {
+    this.isWin = false;
+    this.isLose = false;
+  }
+
+  restartAndClose() {
+    this.restartGame();
   }
 
   getDotClass(cell: number): string {
