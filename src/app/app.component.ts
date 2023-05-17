@@ -13,18 +13,7 @@ export class AppComponent {
   moveCounts = Array(25).fill(0);
   moveCount = 0;
   isFirstMove = true;
-  previousMove: number | undefined;
-  memorizedMove: number | undefined;
-
-  constructor() {}
-
-  restartGame() {
-    this.field.fill(0);
-    this.moveCount = 0;
-    this.moveCounts.fill(0);
-    this.isFirstMove = true;
-    this.previousMove = undefined;
-  }
+  moveHistory: number[] = [];
 
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
@@ -55,25 +44,27 @@ export class AppComponent {
   }
 
   confirmMove(clickedIndex: number) {
-    this.getPrevIndex(this.previousMove);
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
     this.field[clickedIndex] = 1;
     this.checkIsWin();
     this.checkIsLose();
-    this.previousMove = clickedIndex;
+    this.moveHistory.push(clickedIndex);
   }
 
   moveBack() {
-    this.clearUnusedCells();
-    this.getPossibleMoves(this.memorizedMove as number);
-    this.field[this.memorizedMove as number] = 1;
-  }
-
-  getPrevIndex(previousIndex: number | undefined) {
-    this.memorizedMove = previousIndex;
-    console.log(this.memorizedMove);
+    if (this.moveHistory.length >= 0) {
+      this.moveHistory.pop();
+      this.clearUnusedCellsBack();
+      this.decrementCounter(this.moveHistory[this.moveHistory.length -1]);
+      this.field[this.moveHistory[this.moveHistory.length -1]] = 1;
+      this.getPossibleMoves(this.moveHistory[this.moveHistory.length -1]);
+      if(this.moveHistory.length === 0) {
+        this.isFirstMove = true;
+        this.moveCount = 0;
+      }
+    }
   }
 
   incrementCounter(clickedIndex: number) {
@@ -83,10 +74,23 @@ export class AppComponent {
     this.moveCount++;
   }
 
+  decrementCounter(clickedIndex: number) {
+    if (this.moveCounts[clickedIndex] > 0) {
+      this.moveCount--;
+    }
+  }
+
   clearUnusedCells() {
     for (let i = 0; i < this.field.length; i++){
       if(this.field[i] === 2) this.field[i] = 0;
       if(this.field[i] === 1) this.field[i] = 3;
+    }
+  }
+
+  clearUnusedCellsBack() {
+    for (let i = 0; i < this.field.length; i++){
+      if(this.field[i] === 2) this.field[i] = 0;
+      if(this.field[i] === 1) this.field[i] = 0;
     }
   }
 
@@ -114,6 +118,14 @@ export class AppComponent {
         this.field[index] = 2;
       }
     });
+  }
+
+  restartGame() {
+    this.field.fill(0);
+    this.moveCount = 0;
+    this.moveCounts.fill(0);
+    this.isFirstMove = true;
+    this.moveHistory = [];
   }
 
   getCellClass(cell: number): string {
