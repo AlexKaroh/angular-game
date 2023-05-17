@@ -16,25 +16,6 @@ export class AppComponent {
   isFirstMove = true;
   moveHistory: number[] = [];
 
-  getTitle(flag: boolean): string {
-    if(flag === true){
-      return '5x5'
-    } return '10x10';
-  }
-
-  getSize() {
-    if(this.gameSize === true) {
-      this.field = Array(81);
-      this.moveCounts = Array(81);
-      this.restartGame();
-    } else {
-      this.field = Array(25).fill(0);
-      this.moveCounts = Array(25);
-      this.restartGame();
-    }
-    this.gameSize = !this.gameSize
-  }
-
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
     const clickedIndex = elementsArr.indexOf(event);
@@ -67,8 +48,6 @@ export class AppComponent {
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
-    console.log(clickedIndex);
-  
     this.field[clickedIndex] = 1;
     this.checkIsWin();
     this.checkIsLose();
@@ -148,6 +127,25 @@ export class AppComponent {
     this.moveCounts.fill(0);
     this.isFirstMove = true;
     this.moveHistory = [];
+  }
+
+  getTitle(flag: boolean): string {
+    if(flag === true){
+      return '5x5'
+    } return '10x10';
+  }
+
+  getSize() {
+    if(this.gameSize === true) {
+      this.field = Array(81);
+      this.moveCounts = Array(81);
+      this.restartGame();
+    } else {
+      this.field = Array(25).fill(0);
+      this.moveCounts = Array(25);
+      this.restartGame();
+    }
+    this.gameSize = !this.gameSize
   }
 
   getDotClass(cell: number): string {
