@@ -2,15 +2,15 @@
   <div  class="game__ellipse_blue"></div>
   <div class="game__container">
     <div class="game__header">
-      <h1 class="header__title" (click)="field.fill(3)">{{this.gameSize === true ? '5x5' : '10x10'}}</h1>
+      <h1 class="header__title" (click)="field.fill(3)">{{gameSize === true ? '5x5' : '10x10'}}</h1>
       <div class="header__navigation">
         <button class="header__button orange" (click)="getSize()">
-          <span class="button__text orange_font">Swap to {{!this.gameSize === true ? '5x5' : '10x10'}}</span>
+          <span class="button__text orange_font">Swap to {{!gameSize === true ? '5x5' : '10x10'}}</span>
         </button>
         <button class="header__button blue" (click)="moveBack()">
           <span class="button__text blue_font">STEP BACK</span>
         </button>
-        <button class="header__button orange" (click)="restartGame()">
+        <button class="header__button orange" (click)="isRestart = true">
           <span class="button__text orange_font">RESTART</span>
         </button>
       </div>
@@ -25,4 +25,4 @@
   </div>
   <div  class="game__ellipse_orange"></div>
 </main>
-<app-pop-up *ngIf="isWin === true || isLose === true" (close)="closePopUp()" (restart)="restartAndClose()" [isLose]="isLose" [isWin]="isWin"></app-pop-up>
+<app-pop-up *ngIf="isWin === true || isLose === true || isRestart === true" (close)="closePopUp()" (restart)="restartGame()" [isLose]="isLose" [isWin]="isWin" [isRestart]="isRestart"></app-pop-up>

@@ -28,6 +28,7 @@
   width: 868px;
   height: 112px;
   display: flex;
+  justify-content: center;
   align-items: center;
   background: linear-gradient(0deg, rgba(206,184,224,025) 0%, rgba(179,146,207,025) 0%, rgba(136,83,180,1) 27%, rgba(132,77,178,1) 30%, rgba(129,73,176,1) 53%, rgba(123,64,172,1) 100%);
   border-top-left-radius: 33px;
@@ -35,8 +36,11 @@
   border-bottom: 2px solid rgba(255, 255, 255, 0.637);
 }
 
-.header__text {
-  padding-left: 32%;
+.header__title {
+  margin-left: 40px;
+  width: 95%;
+  display: flex;
+  justify-content: center;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -54,9 +58,10 @@
 }
 
 .header__button {
-  margin-left: 210px;
   width: 47px;
   height: 47px;
+  position: relative;
+  left: -20px;
   border: none;
   background: none;
   background-image: url(../../images/cross.png);
@@ -70,21 +75,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   background: rgb(91, 45, 151);
 }
 
+.content__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .content__image {
-  width: 152px;
-  height: 140px;
+  width: 165px;
+  height: 150px;
 }
 
 .winner {
   background-image: url(../../images/winner.png);
+  background-size: 100%;
 }
 
 .loser {
   background-image: url(../../images/loser.png);
+  background-size: 100%;
+}
+
+.restart {
+  width: 0;
+  height: 0;
 }
 
 .content__text {
@@ -103,7 +122,7 @@
 .content__button {
   width: 360px;
 	height: 85px;
-  border-top: 2px solid rgb(40, 230, 255);;
+  border-top: 2px solid rgb(40, 230, 255);
   border-right: none;
   border-left: none;
   border-bottom: none;
@@ -112,6 +131,18 @@
 	cursor: pointer;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), #265DC7;
 	filter: drop-shadow(0px 6px 0px  #2584F4);
+}
+
+.content__buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.red {
+  border-top: 2px solid rgb(255, 103, 103);
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), #DD4747;
+  filter: drop-shadow(0px 6px 0px  #f42525);
 }
 
 .button__font {

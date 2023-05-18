@@ -1,15 +1,25 @@
 <div class="wrapper">
   <div class="popUp">
     <div class="popUp__header">
-      <span class="header__text">CONGRATS!</span>
+      <span class="header__title">{{ getTitle() }}</span>
       <button class="header__button" (click)="closeWindow()"></button>
     </div>
     <div class="popUp__content">
-      <div class="content__image winner"></div>
-      <p class="content__text">You are WINNER!</p>
-      <button class="content__button">
-        <span class="button__font" (click)="restartWindow()">RESTART</span> 
+      <div class="content__container">
+        <div class="content__image" [ngClass]="getClass()"></div>
+        <p class="content__text">{{ getText() }}</p>
+      </div>
+      <button class="content__button" *ngIf="!isRestart">
+        <span class="button__font"(click)="restartWindow()">{{ isWin ? 'RESTART' : 'TRY AGAIN' }}</span>
       </button>
+      <div class="content__buttons" *ngIf="isRestart">
+        <button class="content__button" (click)="restartWindow()">
+          <span class="button__font">YES</span>
+        </button>
+        <button class="content__button red" (click)="closeWindow()">
+          <span class="button__font">NO</span>
+        </button>
+      </div>
     </div>
     <div class="popUp__footer"></div>
   </div>

@@ -17,6 +17,7 @@ export class AppComponent {
   moveHistory: number[] = [];
   isWin = false;
   isLose = false;
+  isRestart = false;
 
   getPosition(event: EventTarget| null) {
     const elementsArr = this.square!.toArray().map(el => el.nativeElement);
@@ -131,6 +132,7 @@ export class AppComponent {
     this.moveHistory = [];
     this.isWin = false;
     this.isLose = false;
+    this.isRestart = false;
   }
 
   getTitle(flag: boolean): string {
@@ -155,10 +157,7 @@ export class AppComponent {
   closePopUp() {
     this.isWin = false;
     this.isLose = false;
-  }
-
-  restartAndClose() {
-    this.restartGame();
+    this.isRestart = false;
   }
 
   getDotClass(cell: number): string {
