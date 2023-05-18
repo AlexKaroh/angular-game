@@ -1,26 +1,25 @@
 <div class="wrapper">
-  <div class="popUp">
-    <div class="popUp__header">
-      <span class="header__title">{{ getTitle() }}</span>
-      <button class="header__button" (click)="closeWindow()"></button>
+  <div class="popup">
+    <div class="header">
+      <h1 class="title">{{ getTitle() }}</h1>
+      <button class="close_button" (click)="closeWindow()"></button>
     </div>
-    <div class="popUp__content">
-      <div class="content__container">
-        <div class="content__image" [ngClass]="getClass()"></div>
-        <p class="content__text">{{ getText() }}</p>
+    <div class="popup_content">
+      <div class="content_container">
+        <div class="image" [ngClass]="getClass()"></div>
+        <p class="content_text">{{ getText() }}</p>
       </div>
-      <button class="content__button" *ngIf="!isRestart">
-        <span class="button__font"(click)="restartWindow()">{{ isWin ? 'RESTART' : 'TRY AGAIN' }}</span>
+      <button class="button" (click)="restartWindow()" *ngIf="!(this.popUpState === 'restart')">
+        <span class="button_font">{{ this.popUpState === 'win' ? 'RESTART' : 'TRY AGAIN' }}</span>
       </button>
-      <div class="content__buttons" *ngIf="isRestart">
-        <button class="content__button" (click)="restartWindow()">
-          <span class="button__font">YES</span>
+      <div class="buttons_container" *ngIf="this.popUpState === 'restart'">
+        <button class="button" (click)="restartWindow()">
+          <span class="button_font">YES</span>
         </button>
-        <button class="content__button red" (click)="closeWindow()">
-          <span class="button__font">NO</span>
+        <button class="button red" (click)="closeWindow()">
+          <span class="button_font">NO</span>
         </button>
       </div>
     </div>
-    <div class="popUp__footer"></div>
   </div>
 </div>

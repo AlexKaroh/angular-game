@@ -1,49 +1,31 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+enum cellState {
+  'empty',
+  'active',
+  'available',
+  'visited',
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AppComponent {
-  @ViewChildren('square') square: QueryList<ElementRef> | undefined;
   title = '5x5'
-  gameSize = true;
-  field = Array(25).fill(0);
-  moveCounts = Array(25).fill(0);
-  moveCount = 0;
-  isFirstMove = true;
+  cells: number[] = Array(25).fill(cellState.empty);
+  moveCounts: number[] = Array(25).fill(0);
   moveHistory: number[] = [];
-  isWin = false;
-  isLose = false;
-  isRestart = false;
+  moveCount = 0;
+  popUpState: string | boolean  = false;
+  isFieldSizeSmall = true;
 
-  getPosition(event: EventTarget| null) {
-    const elementsArr = this.square!.toArray().map(el => el.nativeElement);
-    const clickedIndex = elementsArr.indexOf(event);
-    this.validateMove(clickedIndex);
-  }
-
-  validateMove(clickedIndex: number): void {
-    if(this.isFirstMove === true) {
+  makeMove(clickedIndex: number): void {
+    if(this.moveHistory.length === 0 || this.cells[clickedIndex] === cellState.available) {
       this.confirmMove(clickedIndex);
-      this.isFirstMove = false;
-    }
-    if(this.isFirstMove === false && this.field[clickedIndex] === 2) {
-      this.confirmMove(clickedIndex);
-    }
-  }
-
-  checkIsWin() {
-    if(this.field.filter(el => el === 3).length === this.field.length - 1 && this.field.filter(el => el === 1).length === 1){
-      this.isWin = true;
-    }
-  }
-
-  checkIsLose() {
-    if(this.field.filter(el => el === 2).length === 0 && this.isWin === false) {
-      this.isLose = true;
     }
   }
 
@@ -51,55 +33,13 @@ export class AppComponent {
     this.clearUnusedCells();
     this.getPossibleMoves(clickedIndex);
     this.incrementCounter(clickedIndex);
-    this.field[clickedIndex] = 1;
-    this.checkIsWin();
-    this.checkIsLose();
+    this.cells[clickedIndex] = cellState.active;
+    this.checkGameState();
     this.moveHistory.push(clickedIndex);
   }
 
-  moveBack() {
-    if (this.moveHistory.length >= 0) {
-      this.moveHistory.pop();
-      this.clearUnusedCellsBack();
-      this.decrementCounter(this.moveHistory[this.moveHistory.length -1]);
-      this.field[this.moveHistory[this.moveHistory.length -1]] = 1;
-      this.getPossibleMoves(this.moveHistory[this.moveHistory.length -1]);
-      if(this.moveHistory.length === 0) {
-        this.isFirstMove = true;
-        this.moveCount = 0;
-      }
-    }
-  }
-
-  incrementCounter(clickedIndex: number) {
-    if (this.moveCounts[clickedIndex] === 0) {
-      this.moveCounts[clickedIndex] = this.moveCount + 1;
-    }
-    this.moveCount++;
-  }
-
-  decrementCounter(clickedIndex: number) {
-    if (this.moveCounts[clickedIndex] > 0) {
-      this.moveCount--;
-    }
-  }
-
-  clearUnusedCells() {
-    for (let i = 0; i < this.field.length; i++){
-      if(this.field[i] === 2) this.field[i] = 0;
-      if(this.field[i] === 1) this.field[i] = 3;
-    }
-  }
-
-  clearUnusedCellsBack() {
-    for (let i = 0; i < this.field.length; i++){
-      if(this.field[i] === 2) this.field[i] = 0;
-      if(this.field[i] === 1) this.field[i] = 0;
-    }
-  }
-
   getPossibleMoves(index: number) {
-    const rowSize = Math.sqrt(this.field.length);
+    const rowSize = Math.sqrt(this.cells.length);
     const row = Math.floor(index / rowSize);
     const col = index % rowSize;
     const possibleMoves = [];
@@ -118,55 +58,86 @@ export class AppComponent {
     }
 
     possibleMoves.forEach(index => {
-      if (this.field[index] === 0) {
-        this.field[index] = 2;
+      if (this.cells[index] === cellState.empty) {
+        this.cells[index] = cellState.available;
       }
     });
   }
 
-  restartGame() {
-    this.field.fill(0);
-    this.moveCount = 0;
-    this.moveCounts.fill(0);
-    this.isFirstMove = true;
-    this.moveHistory = [];
-    this.isWin = false;
-    this.isLose = false;
-    this.isRestart = false;
+  clearUnusedCells() {
+    for (let i = 0; i < this.cells.length; i++){
+      if(this.cells[i] === cellState.available) this.cells[i] = cellState.empty;
+      if(this.cells[i] === cellState.active) this.cells[i] = cellState.visited;
+    }
   }
 
-  getTitle(flag: boolean): string {
-    if(flag === true){
-      return '5x5'
-    } return '10x10';
+  checkGameState() {
+    if(!this.cells.some(el => el === cellState.available)) {
+      this.popUpState = 'lose';
+    }
+    if(this.moveHistory.length === this.cells.length - 1){
+      this.popUpState = 'win';
+    }
+  }
+
+  moveBack() {
+    console.log(this.moveHistory.length);
+    if (this.moveHistory.length >= 0) {
+      let lastIndex = this.moveHistory[this.moveHistory.length - 1];
+      this.moveHistory.pop();
+      this.clearUnusedCellsBack();
+      lastIndex = this.moveHistory[this.moveHistory.length - 1];
+      this.moveCount--;
+      this.cells[lastIndex] = cellState.active;
+      this.getPossibleMoves(lastIndex);
+    }
+  }
+
+  incrementCounter(clickedIndex: number) {
+    if (this.moveCounts[clickedIndex] === cellState.empty) {
+      this.moveCounts[clickedIndex] = this.moveCount + 1;
+    }
+    this.moveCount++;
+  }
+
+  clearUnusedCellsBack() {
+    for (let i = 0; i < this.cells.length; i++){
+      if(this.cells[i] === cellState.available) this.cells[i] = cellState.empty;
+      if(this.cells[i] === cellState.active) this.cells[i] = cellState.empty;
+    }
+  }
+
+  restartGame() {
+    this.cells.fill(cellState.empty);
+    this.moveCount = 0;
+    this.moveCounts.fill(0);
+    this.moveHistory = [];
+    this.popUpState = false;
   }
 
   getSize() {
-    if(this.gameSize === true) {
-      this.field = Array(81);
-      this.moveCounts = Array(81);
-      this.restartGame();
-    } else {
-      this.field = Array(25).fill(0);
-      this.moveCounts = Array(25);
-      this.restartGame();
-    }
-    this.gameSize = !this.gameSize
-  }
+    const smallField = Array(25);
+    const largeField = Array(81);
 
-  closePopUp() {
-    this.isWin = false;
-    this.isLose = false;
-    this.isRestart = false;
+    if(!this.isFieldSizeSmall) {
+      this.cells = smallField;
+      this.moveCounts = smallField;
+    } else {
+      this.cells = largeField;
+      this.moveCounts = largeField;
+    }
+  
+    this.restartGame();
+    this.isFieldSizeSmall = !this.isFieldSizeSmall
   }
 
   getDotClass(cell: number): string {
     switch (cell) {
-      case 1:
+      case cellState.active:
         return 'active';
-      case 2:
-        return 'possible';
-      case 3:
+      case cellState.available:
+        return 'available';
+      case cellState.visited:
         return 'visited'
       default:
         return 'empty';
@@ -174,8 +145,8 @@ export class AppComponent {
   }
 
   getCellSize(cell: number): string {
-    if (cell === 2) {
-      return (this.gameSize === false ? 'small posible' : 'big posible');
-    } return (this.gameSize === false ? 'small' : 'big');
+    if (cell === cellState.available) {
+      return (this.isFieldSizeSmall ? 'large posible' : 'small posible');
+    } return (this.isFieldSizeSmall ? 'large' : 'small');
   }
 }

@@ -1,28 +1,28 @@
-<main class="game">
-  <div  class="game__ellipse_blue"></div>
-  <div class="game__container">
-    <div class="game__header">
-      <h1 class="header__title" (click)="field.fill(3)">{{gameSize === true ? '5x5' : '10x10'}}</h1>
-      <div class="header__navigation">
-        <button class="header__button orange" (click)="getSize()">
-          <span class="button__text orange_font">Swap to {{!gameSize === true ? '5x5' : '10x10'}}</span>
+<div class="game">
+  <div  class="ellipse_blue"></div>
+  <div class="game_container">
+    <div class="header">
+      <h1 class="title">{{isFieldSizeSmall ? '5x5' : '9x9'}}</h1>
+      <div class="header_navigation">
+        <button class="button orange" (click)="getSize()">
+          <span class="button_text orange_font">Swap to {{!isFieldSizeSmall ? '5x5' : '9x9'}}</span>
         </button>
-        <button class="header__button blue" (click)="moveBack()">
-          <span class="button__text blue_font">STEP BACK</span>
+        <button class="button blue" (click)="moveBack()">
+          <span class="button_text blue_font">STEP BACK</span>
         </button>
-        <button class="header__button orange" (click)="isRestart = true">
-          <span class="button__text orange_font">RESTART</span>
+        <button class="button orange" (click)="popUpState = 'restart'">
+          <span class="button_text orange_font">RESTART</span>
         </button>
       </div>
     </div>
-    <div class="game__field" [ngClass]="gameSize === true ? 'five' : 'nine'">
-      <div class="field__cell" [ngClass]="getCellSize(cell)" (click)="getPosition($event.target)" *ngFor="let cell of field; let i = index" #square>
-        <div class="cell__dot" [ngClass]="getDotClass(cell)" (click)="getPosition(square)">
-          <span class="cell__font" *ngIf="cell > 0 && cell !== 2">{{ moveCounts[i] }}</span>
+    <div class="field" [ngClass]="isFieldSizeSmall ? 'five' : 'nine'">
+      <div class="cell" [ngClass]="getCellSize(cell)" (click)="makeMove(i)" *ngFor="let cell of cells; let i = index">
+        <div [ngClass]="getDotClass(cell)">
+          <span class="font" *ngIf="cell > 0 && cell !== 2">{{ moveCounts[i] }}</span>
         </div>
       </div>
     </div>
   </div>
-  <div  class="game__ellipse_orange"></div>
-</main>
-<app-pop-up *ngIf="isWin === true || isLose === true || isRestart === true" (close)="closePopUp()" (restart)="restartGame()" [isLose]="isLose" [isWin]="isWin" [isRestart]="isRestart"></app-pop-up>
+  <div  class="ellipse_orange"></div>
+</div>
+<app-pop-up *ngIf="popUpState" (close)="popUpState = false" (restart)="restartGame()" [popUpState]="popUpState"></app-pop-up>
