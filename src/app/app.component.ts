@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PopupState } from 'src/enums/PopupState';
 
 enum CellState {
-  'empty',
-  'active',
-  'available',
-  'visited',
+  EMPTY,
+  ACTIVE,
+  AVAILABLE,
+  VISITED,
 }
-type CellType = 0 | 1 | 2 | 3;
-type CountsType = number;
+type CellType = typeof CellState[keyof typeof CellState];
 const DEFAULT_VALUE = 0;
 const HORSE_RANGE = [-2, -1, 1, 2];
 
@@ -20,16 +19,16 @@ const HORSE_RANGE = [-2, -1, 1, 2];
 })
 export class AppComponent {
   title = '5x5'
-  cells: CellType[] = Array(25).fill(CellState.available);
-  moveCounts: CountsType[] = Array(25).fill(DEFAULT_VALUE);
+  cells: CellType[] = Array(25).fill(CellState.AVAILABLE);
+  moveCounts: number[] = Array(25).fill(DEFAULT_VALUE);
   moveHistory: number[] = [];
-  popupState = PopupState.disabled;
+  popupState = PopupState.DISABLED;
   isFieldSizeSmall = true;
 
   makeMove(clickedIndex: number): void {
-    if(this.cells[clickedIndex] === CellState.available) {
+    if(this.cells[clickedIndex] === CellState.AVAILABLE) {
       this.clearUnusedCells();
-      this.cells[clickedIndex] = CellState.active;
+      this.cells[clickedIndex] = CellState.ACTIVE;
       this.setPossibleMoves(clickedIndex);
       this.incrementCounter(clickedIndex);
       this.moveHistory.push(clickedIndex);
@@ -49,8 +48,8 @@ export class AppComponent {
           const possibleColunm = col + x;
           if (possibleRow >= 0 && possibleRow < rowSize && possibleColunm >= 0 && possibleColunm < rowSize) {
             const possibleMove = possibleRow * rowSize + possibleColunm ;
-            if (this.cells[possibleMove] === CellState.empty) {
-              this.cells[possibleMove] = CellState.available;
+            if (this.cells[possibleMove] === CellState.EMPTY) {
+              this.cells[possibleMove] = CellState.AVAILABLE;
             }
           }
         }
@@ -60,20 +59,20 @@ export class AppComponent {
 
   checkGameState() {
     if (this.moveHistory.length === this.cells.length){
-      this.popupState = PopupState.win;
-    } else if (!this.cells.some(el => el === CellState.available)) {
-      this.popupState = PopupState.lose;
+      this.popupState = PopupState.WIN;
+    } else if (!this.cells.some(el => el === CellState.AVAILABLE)) {
+      this.popupState = PopupState.LOSE;
     }
   }
 
   stepBack() {
     if (this.moveHistory.length > DEFAULT_VALUE) {
       let lastIndex = this.moveHistory[this.moveHistory.length - 1];
-      this.moveCounts[lastIndex] = CellState.empty;
+      this.moveCounts[lastIndex] = CellState.EMPTY;
       this.moveHistory.pop();
       this.clearUnusedCellsBack();
       lastIndex = this.moveHistory[this.moveHistory.length - 1];
-      this.cells[lastIndex] = CellState.active;
+      this.cells[lastIndex] = CellState.ACTIVE;
       this.setPossibleMoves(lastIndex);
     }
   }
@@ -90,43 +89,43 @@ export class AppComponent {
 
   clearUnusedCells() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === CellState.available) {
-        this.cells[i] = CellState.empty;
+      if(this.cells[i] === CellState.AVAILABLE) {
+        this.cells[i] = CellState.EMPTY;
       }
-      else if (this.cells[i] === CellState.active) {
-      this.cells[i] = CellState.visited;
+      else if (this.cells[i] === CellState.ACTIVE) {
+      this.cells[i] = CellState.VISITED;
       }
     }
   }
 
   clearUnusedCellsBack() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === CellState.available) {
-        this.cells[i] = CellState.empty;
+      if(this.cells[i] === CellState.AVAILABLE) {
+        this.cells[i] = CellState.EMPTY;
       }
-      else if(this.cells[i] === CellState.active) {
-        this.cells[i] = CellState.empty;
+      else if(this.cells[i] === CellState.ACTIVE) {
+        this.cells[i] = CellState.EMPTY;
       }
     }
   }
 
   restartGame() {
-    this.cells.fill(CellState.available);
+    this.cells.fill(CellState.AVAILABLE);
     this.moveCounts.fill(DEFAULT_VALUE);
     this.moveHistory = [];
-    this.popupState = PopupState.disabled;
+    this.popupState = PopupState.DISABLED;
   }
 
   closePopUp() {
-    this.popupState = PopupState.disabled;
+    this.popupState = PopupState.DISABLED;
   }
 
   restartPopUp() {
-    this.popupState = PopupState.restart;
+    this.popupState = PopupState.RESTART;
   }
 
   isCellVisitedAndActive(cell: number) {
-    return cell > CellState.empty && cell !== CellState.available;
+    return cell > CellState.EMPTY && cell !== CellState.AVAILABLE;
   }
 
   swapSize() {
@@ -143,11 +142,11 @@ export class AppComponent {
 
   getDotClass(cell: number): string {
     switch (cell) {
-      case CellState.active:
+      case CellState.ACTIVE:
         return 'active';
-      case CellState.available:
+      case CellState.AVAILABLE:
         return 'available';
-      case CellState.visited:
+      case CellState.VISITED:
         return 'visited';
       default:
         return 'empty';
@@ -156,7 +155,7 @@ export class AppComponent {
 
   getCellSize(cell: number): string {
     let size = this.isFieldSizeSmall ? 'large' : 'small';
-    if (cell === CellState.available) {
+    if (cell === CellState.AVAILABLE) {
       size += ' possible';
     }
     return size;

@@ -24,25 +24,25 @@ export class PopUpComponent implements OnChanges {
   }
 
   getTitle() {
-    if (this.popup === PopupState.restart) {
+    if (this.popup === PopupState.RESTART) {
       this.title = 'RESTART';
-    } else this.title = this.popup === PopupState.win ? 'CONGRATS!' : 'SORRY!';
+    } else this.title = this.popup === PopupState.WIN ? 'CONGRATS!' : 'SORRY!';
   }
 
   getText() {
-    if (this.popup === PopupState.restart) {
+    if (this.popup === PopupState.RESTART) {
       this.content = 'Are you sure?';
-    } else this.content = this.popup === PopupState.win ? 'You are WINNER!' : 'You lose!';
+    } else this.content = this.popup === PopupState.WIN ? 'You are WINNER!' : 'You lose!';
   }
 
   getClass() {
-    if (this.popup === PopupState.restart) {
+    if (this.popup === PopupState.RESTART) {
       this.classImage = 'restart';
-    } else this.classImage = this.popup === PopupState.win ? 'winner' : 'loser';
+    } else this.classImage = this.popup === PopupState.WIN ? 'winner' : 'loser';
   }
 
   isPopupStateRestarted() {
-    return this.popup === PopupState.restart;
+    return this.popup === PopupState.RESTART;
   }
 
   closeWindow() {
