@@ -23,4 +23,4 @@
     </div>
   </div>
 </div>
-<app-pop-up *ngIf="popUp" (close)="closePopUp()" (restart)="restartGame()" [popUp]="popUp"></app-pop-up>
+<app-pop-up *ngIf="popupState" (close)="closePopUp()" (restart)="restartGame()" [popup]="popupState"></app-pop-up>

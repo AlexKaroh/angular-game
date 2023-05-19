@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { popUpState } from '../app.component';
+import { PopupState } from '../app.component';
 
 @Component({
   selector: 'app-pop-up',
@@ -9,30 +9,30 @@ import { popUpState } from '../app.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopUpComponent {
-  @Input() popUp?: number;
+  @Input() popup?: number;
   @Output() close = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
 
   getTitle(): string {
-    if (this.popUp === popUpState.restart) {
+    if (this.popup === PopupState.restart) {
       return 'RESTART'
-    } return this.popUp === popUpState.win ? 'CONGRATS!' : 'SORRY!';
+    } return this.popup === PopupState.win ? 'CONGRATS!' : 'SORRY!';
   }
 
   getText(): string {
-    if (this.popUp === popUpState.restart) {
+    if (this.popup === PopupState.restart) {
       return 'Are you sure?'
-    } return this.popUp === popUpState.win ? 'You are WINNER!' : 'You lose!';
+    } return this.popup === PopupState.win ? 'You are WINNER!' : 'You lose!';
   }
 
   getClass(): string {
-    if (this.popUp === popUpState.restart) {
+    if (this.popup === PopupState.restart) {
       return 'restart'
-    } return this.popUp === popUpState.win ? 'winner' : 'loser';
+    } return this.popup === PopupState.win ? 'winner' : 'loser';
   }
 
   getButtons() {
-    return this.popUp === popUpState.restart;
+    return this.popup === PopupState.restart;
   }
 
   closeWindow() {

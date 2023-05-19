@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-enum cellState {
+enum CellState {
   'empty',
   'active',
   'available',
   'visited',
 }
 
-export enum popUpState {
+export enum PopupState {
   'disabled',
   'win',
   'lose',
@@ -23,17 +23,16 @@ export enum popUpState {
 
 export class AppComponent {
   title = '5x5'
-  cells: number[] = Array(25).fill(cellState.empty);
+  cells: number[] = Array(25).fill(CellState.empty);
   moveCounts: number[] = Array(25).fill(0);
   moveHistory: number[] = [];
-  moveCount = 0;
-  popUp = popUpState.disabled;
+  popupState = PopupState.disabled;
   isFieldSizeSmall = true;
 
   makeMove(clickedIndex: number): void {
-    if(this.moveHistory.length === 0 || this.cells[clickedIndex] === cellState.available) {
+    if(this.moveHistory.length === 0 || this.cells[clickedIndex] === CellState.available) {
       this.clearUnusedCells();
-      this.cells[clickedIndex] = cellState.active;
+      this.cells[clickedIndex] = CellState.active;
       this.getPossibleMoves(clickedIndex);
       this.incrementCounter(clickedIndex);
       this.moveHistory.push(clickedIndex);
@@ -61,97 +60,94 @@ export class AppComponent {
     }
 
     possibleMoves.forEach(index => {
-      if (this.cells[index] === cellState.empty) {
-        this.cells[index] = cellState.available;
+      if (this.cells[index] === CellState.empty) {
+        this.cells[index] = CellState.available;
       }
     });
   }
 
   checkGameState() {
     if (this.moveHistory.length === this.cells.length){
-      this.popUp = popUpState.win;
-    } else if (!this.cells.some(el => el === cellState.available)) {
-      this.popUp = popUpState.lose;
+      this.popupState = PopupState.win;
+    } else if (!this.cells.some(el => el === CellState.available)) {
+      this.popupState = PopupState.lose;
     }
   }
 
   stepBack() {
     if (this.moveHistory.length > 0) {
       let lastIndex = this.moveHistory[this.moveHistory.length - 1];
-      this.moveCounts[lastIndex] = cellState.empty;
+      this.moveCounts[lastIndex] = CellState.empty;
       this.moveHistory.pop();
       this.clearUnusedCellsBack();
       lastIndex = this.moveHistory[this.moveHistory.length - 1];
-      this.moveCount--;
-      this.cells[lastIndex] = cellState.active;
+      this.cells[lastIndex] = CellState.active;
       this.getPossibleMoves(lastIndex);
     }
   }
 
+  getMoveCount() {
+    return this.moveHistory.length + 1;
+  }
+
   incrementCounter(clickedIndex: number) {
-    if (this.moveCounts[clickedIndex] === cellState.empty) {
-      this.moveCounts[clickedIndex] = this.moveCount + 1;
+    if (this.moveCounts[clickedIndex] === CellState.empty) {
+      this.moveCounts[clickedIndex] = this.getMoveCount();
     }
-    this.moveCount++;
   }
 
   clearUnusedCells() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === cellState.available) this.cells[i] = cellState.empty;
-      if(this.cells[i] === cellState.active) this.cells[i] = cellState.visited;
+      if(this.cells[i] === CellState.available) this.cells[i] = CellState.empty;
+      if(this.cells[i] === CellState.active) this.cells[i] = CellState.visited;
     }
   }
 
   clearUnusedCellsBack() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === cellState.available) this.cells[i] = cellState.empty;
-      if(this.cells[i] === cellState.active) this.cells[i] = cellState.empty;
+      if(this.cells[i] === CellState.available) this.cells[i] = CellState.empty;
+      if(this.cells[i] === CellState.active) this.cells[i] = CellState.empty;
     }
   }
 
   restartGame() {
-    this.cells.fill(cellState.empty);
-    this.moveCount = 0;
+    this.cells.fill(CellState.empty);
     this.moveCounts.fill(0);
     this.moveHistory = [];
-    this.popUp = popUpState.disabled;
+    this.popupState = PopupState.disabled;
   }
 
   closePopUp() {
-    this.popUp = popUpState.disabled;
+    this.popupState = PopupState.disabled;
   }
 
   restartPopUp() {
-    this.popUp = popUpState.restart
+    this.popupState = PopupState.restart
   }
 
   isCellVisitedAndActive(cell: number) {
-    return cell > cellState.empty && cell !== cellState.available;
+    return cell > CellState.empty && cell !== CellState.available;
   }
 
   swapSize() {
-    const smallField = Array(25);
-    const largeField = Array(81);
-
-    if(!this.isFieldSizeSmall) {
-      this.cells = smallField;
-      this.moveCounts = smallField;
+    this.isFieldSizeSmall = !this.isFieldSizeSmall;
+    if(this.isFieldSizeSmall) {
+      this.cells = Array(25);
+      this.moveCounts = Array(25);
     } else {
-      this.cells = largeField;
-      this.moveCounts = largeField;
+      this.cells = Array(81);
+      this.moveCounts = Array(81);
     }
-  
     this.restartGame();
-    this.isFieldSizeSmall = !this.isFieldSizeSmall
   }
 
   getDotClass(cell: number): string {
     switch (cell) {
-      case cellState.active:
+      case CellState.active:
         return 'active';
-      case cellState.available:
+      case CellState.available:
         return 'available';
-      case cellState.visited:
+      case CellState.visited:
         return 'visited'
       default:
         return 'empty';
@@ -159,7 +155,7 @@ export class AppComponent {
   }
 
   getCellSize(cell: number): string {
-    if (cell === cellState.available) {
+    if (cell === CellState.available) {
       return (this.isFieldSizeSmall ? 'large posible' : 'small posible');
     } return (this.isFieldSizeSmall ? 'large' : 'small');
   }
