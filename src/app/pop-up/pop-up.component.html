@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="popup">
     <div class="header">
-      <h1 class="title">{{ getTitle() }}</h1>
+      <h2 class="title">{{ getTitle() }}</h2>
       <button class="close_button" (click)="closeWindow()"></button>
     </div>
     <div class="popup_content">
@@ -9,10 +9,10 @@
         <div class="image" [ngClass]="getClass()"></div>
         <p class="content_text">{{ getText() }}</p>
       </div>
-      <button class="button" (click)="restartWindow()" *ngIf="!(this.popUpState === 'restart')">
-        <span class="button_font">{{ this.popUpState === 'win' ? 'RESTART' : 'TRY AGAIN' }}</span>
+      <button class="button" (click)="restartWindow()" *ngIf="!getButtons()">
+        <span class="button_font">TRY AGAIN</span>
       </button>
-      <div class="buttons_container" *ngIf="this.popUpState === 'restart'">
+      <div class="buttons_container" *ngIf="getButtons()">
         <button class="button" (click)="restartWindow()">
           <span class="button_font">YES</span>
         </button>

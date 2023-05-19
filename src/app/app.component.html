@@ -1,16 +1,15 @@
 <div class="game">
-  <div  class="ellipse_blue"></div>
   <div class="game_container">
     <div class="header">
       <h1 class="title">{{isFieldSizeSmall ? '5x5' : '9x9'}}</h1>
       <div class="header_navigation">
-        <button class="button orange" (click)="getSize()">
+        <button class="button orange" (click)="swapSize()">
           <span class="button_text orange_font">Swap to {{!isFieldSizeSmall ? '5x5' : '9x9'}}</span>
         </button>
-        <button class="button blue" (click)="moveBack()">
+        <button class="button blue" (click)="stepBack()">
           <span class="button_text blue_font">STEP BACK</span>
         </button>
-        <button class="button orange" (click)="popUpState = 'restart'">
+        <button class="button orange" (click)="restartPopUp()">
           <span class="button_text orange_font">RESTART</span>
         </button>
       </div>
@@ -18,11 +17,10 @@
     <div class="field" [ngClass]="isFieldSizeSmall ? 'five' : 'nine'">
       <div class="cell" [ngClass]="getCellSize(cell)" (click)="makeMove(i)" *ngFor="let cell of cells; let i = index">
         <div [ngClass]="getDotClass(cell)">
-          <span class="font" *ngIf="cell > 0 && cell !== 2">{{ moveCounts[i] }}</span>
+          <span class="font" *ngIf="isCellVisitedAndActive(cell)">{{ moveCounts[i] }}</span>
         </div>
       </div>
     </div>
   </div>
-  <div  class="ellipse_orange"></div>
 </div>
-<app-pop-up *ngIf="popUpState" (close)="popUpState = false" (restart)="restartGame()" [popUpState]="popUpState"></app-pop-up>
+<app-pop-up *ngIf="popUp" (close)="closePopUp()" (restart)="restartGame()" [popUp]="popUp"></app-pop-up>
