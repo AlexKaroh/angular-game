@@ -76,7 +76,6 @@ export class AppComponent {
   }
 
   stepBack() {
-    console.log(this.moveHistory.length);
     if (this.moveHistory.length > 0) {
       let lastIndex = this.moveHistory[this.moveHistory.length - 1];
       this.moveCounts[lastIndex] = cellState.empty;
