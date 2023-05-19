@@ -20,7 +20,6 @@ export enum PopupState {
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class AppComponent {
   title = '5x5'
   cells: number[] = Array(25).fill(CellState.empty);
