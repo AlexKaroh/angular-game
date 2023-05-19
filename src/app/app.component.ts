@@ -8,7 +8,7 @@ enum CellState {
   'visited',
 }
 type CellType = 0 | 1 | 2 | 3;
-
+type CountsType = number;
 const DEFAULT_VALUE = 0;
 const HORSE_RANGE = [-2, -1, 1, 2];
 
@@ -21,7 +21,7 @@ const HORSE_RANGE = [-2, -1, 1, 2];
 export class AppComponent {
   title = '5x5'
   cells: CellType[] = Array(25).fill(CellState.available);
-  moveCounts: number[] = Array(25).fill(0);
+  moveCounts: CountsType[] = Array(25).fill(DEFAULT_VALUE);
   moveHistory: number[] = [];
   popupState = PopupState.disabled;
   isFieldSizeSmall = true;
@@ -156,7 +156,9 @@ export class AppComponent {
 
   getCellSize(cell: number): string {
     let size = this.isFieldSizeSmall ? 'large' : 'small';
-    if (cell === CellState.available) size += ' possible'
+    if (cell === CellState.available) {
+      size += ' possible';
+    }
     return size;
   }
 }

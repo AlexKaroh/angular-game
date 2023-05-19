@@ -17,27 +17,27 @@ export class PopUpComponent implements OnChanges {
   classImage?: string;
 
   ngOnChanges() {
-    this.getTitle()
-    this.getText()
-    this.getClass()
-    this.isPopupStateRestarted()
+    this.getTitle();
+    this.getText();
+    this.getClass();
+    this.isPopupStateRestarted();
   }
 
   getTitle() {
     if (this.popup === PopupState.restart) {
-      this.title = 'RESTART'
+      this.title = 'RESTART';
     } else this.title = this.popup === PopupState.win ? 'CONGRATS!' : 'SORRY!';
   }
 
   getText() {
     if (this.popup === PopupState.restart) {
-      this.content = 'Are you sure?'
+      this.content = 'Are you sure?';
     } else this.content = this.popup === PopupState.win ? 'You are WINNER!' : 'You lose!';
   }
 
   getClass() {
     if (this.popup === PopupState.restart) {
-      this.classImage = 'restart'
+      this.classImage = 'restart';
     } else this.classImage = this.popup === PopupState.win ? 'winner' : 'loser';
   }
 
