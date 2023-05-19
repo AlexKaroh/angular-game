@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { PopupState } from 'src/enums/PopupState';
 
 enum CellState {
   'empty',
@@ -6,13 +7,10 @@ enum CellState {
   'available',
   'visited',
 }
+type CellType = 0 | 1 | 2 | 3;
 
-export enum PopupState {
-  'disabled',
-  'win',
-  'lose',
-  'restart'
-}
+const DEFAULT_VALUE = 0;
+const HORSE_RANGE = [-2, -1, 1, 2];
 
 @Component({
   selector: 'app-root',
@@ -22,47 +20,42 @@ export enum PopupState {
 })
 export class AppComponent {
   title = '5x5'
-  cells: number[] = Array(25).fill(CellState.empty);
+  cells: CellType[] = Array(25).fill(CellState.available);
   moveCounts: number[] = Array(25).fill(0);
   moveHistory: number[] = [];
   popupState = PopupState.disabled;
   isFieldSizeSmall = true;
 
   makeMove(clickedIndex: number): void {
-    if(this.moveHistory.length === 0 || this.cells[clickedIndex] === CellState.available) {
+    if(this.cells[clickedIndex] === CellState.available) {
       this.clearUnusedCells();
       this.cells[clickedIndex] = CellState.active;
-      this.getPossibleMoves(clickedIndex);
+      this.setPossibleMoves(clickedIndex);
       this.incrementCounter(clickedIndex);
       this.moveHistory.push(clickedIndex);
       this.checkGameState();
     }
   }
 
-  getPossibleMoves(index: number) {
+  setPossibleMoves(index: number) {
     const rowSize = Math.sqrt(this.cells.length);
     const row = Math.floor(index / rowSize);
     const col = index % rowSize;
-    const possibleMoves = [];
-    const horseRange = [-2, -1, 1, 2];
 
-    for (let x of horseRange) {
-      for (let y of horseRange) {
+    for (let x of HORSE_RANGE) {
+      for (let y of HORSE_RANGE) {
         if (Math.abs(x) !== Math.abs(y)) {
           const possibleRow = row + y;
           const possibleColunm = col + x;
           if (possibleRow >= 0 && possibleRow < rowSize && possibleColunm >= 0 && possibleColunm < rowSize) {
-            possibleMoves.push(possibleRow * rowSize + possibleColunm);
+            const possibleMove = possibleRow * rowSize + possibleColunm ;
+            if (this.cells[possibleMove] === CellState.empty) {
+              this.cells[possibleMove] = CellState.available;
+            }
           }
         }
       }
     }
-
-    possibleMoves.forEach(index => {
-      if (this.cells[index] === CellState.empty) {
-        this.cells[index] = CellState.available;
-      }
-    });
   }
 
   checkGameState() {
@@ -74,14 +67,14 @@ export class AppComponent {
   }
 
   stepBack() {
-    if (this.moveHistory.length > 0) {
+    if (this.moveHistory.length > DEFAULT_VALUE) {
       let lastIndex = this.moveHistory[this.moveHistory.length - 1];
       this.moveCounts[lastIndex] = CellState.empty;
       this.moveHistory.pop();
       this.clearUnusedCellsBack();
       lastIndex = this.moveHistory[this.moveHistory.length - 1];
       this.cells[lastIndex] = CellState.active;
-      this.getPossibleMoves(lastIndex);
+      this.setPossibleMoves(lastIndex);
     }
   }
 
@@ -90,28 +83,36 @@ export class AppComponent {
   }
 
   incrementCounter(clickedIndex: number) {
-    if (this.moveCounts[clickedIndex] === CellState.empty) {
+    if (this.moveCounts[clickedIndex] === DEFAULT_VALUE) {
       this.moveCounts[clickedIndex] = this.getMoveCount();
     }
   }
 
   clearUnusedCells() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === CellState.available) this.cells[i] = CellState.empty;
-      if(this.cells[i] === CellState.active) this.cells[i] = CellState.visited;
+      if(this.cells[i] === CellState.available) {
+        this.cells[i] = CellState.empty;
+      }
+      else if (this.cells[i] === CellState.active) {
+      this.cells[i] = CellState.visited;
+      }
     }
   }
 
   clearUnusedCellsBack() {
     for (let i = 0; i < this.cells.length; i++){
-      if(this.cells[i] === CellState.available) this.cells[i] = CellState.empty;
-      if(this.cells[i] === CellState.active) this.cells[i] = CellState.empty;
+      if(this.cells[i] === CellState.available) {
+        this.cells[i] = CellState.empty;
+      }
+      else if(this.cells[i] === CellState.active) {
+        this.cells[i] = CellState.empty;
+      }
     }
   }
 
   restartGame() {
-    this.cells.fill(CellState.empty);
-    this.moveCounts.fill(0);
+    this.cells.fill(CellState.available);
+    this.moveCounts.fill(DEFAULT_VALUE);
     this.moveHistory = [];
     this.popupState = PopupState.disabled;
   }
@@ -121,7 +122,7 @@ export class AppComponent {
   }
 
   restartPopUp() {
-    this.popupState = PopupState.restart
+    this.popupState = PopupState.restart;
   }
 
   isCellVisitedAndActive(cell: number) {
@@ -147,15 +148,15 @@ export class AppComponent {
       case CellState.available:
         return 'available';
       case CellState.visited:
-        return 'visited'
+        return 'visited';
       default:
         return 'empty';
     }
   }
 
   getCellSize(cell: number): string {
-    if (cell === CellState.available) {
-      return (this.isFieldSizeSmall ? 'large posible' : 'small posible');
-    } return (this.isFieldSizeSmall ? 'large' : 'small');
+    let size = this.isFieldSizeSmall ? 'large' : 'small';
+    if (cell === CellState.available) size += ' possible'
+    return size;
   }
 }

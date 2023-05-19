@@ -16,7 +16,7 @@
     </div>
     <div class="field" [ngClass]="isFieldSizeSmall ? 'five' : 'nine'">
       <div class="cell" [ngClass]="getCellSize(cell)" (click)="makeMove(i)" *ngFor="let cell of cells; let i = index">
-        <div [ngClass]="getDotClass(cell)">
+        <div [ngClass]="getMoveCount() > 1 ? getDotClass(cell) : ''">
           <span class="font" *ngIf="isCellVisitedAndActive(cell)">{{ moveCounts[i] }}</span>
         </div>
       </div>

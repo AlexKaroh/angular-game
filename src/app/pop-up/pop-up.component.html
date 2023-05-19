@@ -1,18 +1,18 @@
 <div class="wrapper">
   <div class="popup">
     <div class="header">
-      <h2 class="title">{{ getTitle() }}</h2>
+      <h2 class="title">{{ title }}</h2>
       <button class="close_button" (click)="closeWindow()"></button>
     </div>
     <div class="popup_content">
       <div class="content_container">
-        <div class="image" [ngClass]="getClass()"></div>
-        <p class="content_text">{{ getText() }}</p>
+        <div class="image" [ngClass]="classImage"></div>
+        <p class="content_text">{{ content }}</p>
       </div>
-      <button class="button" (click)="restartWindow()" *ngIf="!getButtons()">
+      <button class="button" (click)="restartWindow()" *ngIf="!isPopupStateRestarted()">
         <span class="button_font">TRY AGAIN</span>
       </button>
-      <div class="buttons_container" *ngIf="getButtons()">
+      <div class="buttons_container" *ngIf="isPopupStateRestarted()">
         <button class="button" (click)="restartWindow()">
           <span class="button_font">YES</span>
         </button>

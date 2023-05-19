@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { PopupState } from '../app.component';
+import { PopupState } from 'src/enums/PopupState';
 
 @Component({
   selector: 'app-pop-up',
@@ -8,30 +8,40 @@ import { PopupState } from '../app.component';
   styleUrls: ['./pop-up.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PopUpComponent {
+export class PopUpComponent implements OnChanges {
   @Input() popup?: number;
   @Output() close = new EventEmitter<void>();
   @Output() restart = new EventEmitter<void>();
+  title?: string;
+  content?: string;
+  classImage?: string;
 
-  getTitle(): string {
-    if (this.popup === PopupState.restart) {
-      return 'RESTART'
-    } return this.popup === PopupState.win ? 'CONGRATS!' : 'SORRY!';
+  ngOnChanges() {
+    this.getTitle()
+    this.getText()
+    this.getClass()
+    this.isPopupStateRestarted()
   }
 
-  getText(): string {
+  getTitle() {
     if (this.popup === PopupState.restart) {
-      return 'Are you sure?'
-    } return this.popup === PopupState.win ? 'You are WINNER!' : 'You lose!';
+      this.title = 'RESTART'
+    } else this.title = this.popup === PopupState.win ? 'CONGRATS!' : 'SORRY!';
   }
 
-  getClass(): string {
+  getText() {
     if (this.popup === PopupState.restart) {
-      return 'restart'
-    } return this.popup === PopupState.win ? 'winner' : 'loser';
+      this.content = 'Are you sure?'
+    } else this.content = this.popup === PopupState.win ? 'You are WINNER!' : 'You lose!';
   }
 
-  getButtons() {
+  getClass() {
+    if (this.popup === PopupState.restart) {
+      this.classImage = 'restart'
+    } else this.classImage = this.popup === PopupState.win ? 'winner' : 'loser';
+  }
+
+  isPopupStateRestarted() {
     return this.popup === PopupState.restart;
   }
 
